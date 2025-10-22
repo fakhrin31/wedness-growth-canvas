@@ -18,16 +18,16 @@ const Footer = () => {
     ],
     Contact: [
       { name: "Hubungi Kami", href: "#contact" },
-      { name: "WhatsApp", href: "https://wa.me/6281234567890" },
-      { name: "Email", href: "mailto:hello@wednesdev.com" },
+      { name: "WhatsApp", href: "https://wa.me/6281339691260" },
+      { name: "Email", href: "mailto:wednesdev.id@gmail.com" },
     ],
   };
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
+    { icon: Github, href: "https://github.com/wednesdev-id", label: "GitHub" },
     { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
     { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: Mail, href: "mailto:hello@wednesdev.com", label: "Email" },
+    { icon: Mail, href: "mailto:wednesdev.id@gmail.com", label: "Email" },
   ];
 
   return (
@@ -38,7 +38,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <img 
-              src="/src/assets/LOGO WEDNESDEV-04.png" 
+              src="/LOGO WEDNESDEV-04.png" 
               alt="WednesDev Logo" 
               className="h-20 w-auto"
             />
@@ -49,10 +49,10 @@ const Footer = () => {
             <div className="flex gap-4">
               {socialLinks.map((social) => (
                 <a
-                  key={social.name}
+                  key={social.label}
                   href={social.href}
                   className="w-10 h-10 bg-gray-800 hover:bg-accent rounded-lg flex items-center justify-center transition-colors"
-                  aria-label={social.name}
+                  aria-label={social.label}
                 >
                   <social.icon className="w-5 h-5" />
                 </a>

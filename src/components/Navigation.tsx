@@ -53,7 +53,7 @@ const Navigation = () => {
               className="flex items-center"
             >
               <img 
-                src="/src/assets/LOGO WEDNESDEV-04.png" 
+                src="/LOGO WEDNESDEV-04.png" 
                 alt="WednesDev Logo" 
                 className="h-16 w-auto"
               />
