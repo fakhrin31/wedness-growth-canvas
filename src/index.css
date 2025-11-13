@@ -48,7 +48,8 @@ All colors MUST be HSL.
     /* Updated Gradient tokens */
     --gradient-primary: linear-gradient(135deg, hsl(225 85% 57%) 0%, hsl(225 85% 47%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(158 94% 49%) 0%, hsl(158 80% 40%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(245 100% 10%) 0%, hsl(245 100% 8%) 100%);
+    /* Web3-like darker hero gradient for light mode */
+    --gradient-hero: radial-gradient(1200px circle at 50% -20%, hsl(230 30% 10%) 0%, hsl(230 30% 8%) 40%, hsl(230 35% 6%) 100%);
 
     /* Updated Shadow tokens */
     --shadow-soft: 0 10px 40px -10px hsl(245 100% 10% / 0.1);
@@ -60,23 +61,23 @@ All colors MUST be HSL.
 
   .dark {
     /* Dark mode with Navy background as per brand guideline */
-    --background: 245 100% 10%; /* Navy #0A0031 for footer/dark sections */
+    --background: 230 35% 5%; /* Near-black with subtle blue tint */
     --foreground: 0 0% 100%; /* White text on dark background */
 
-    --card: 245 100% 12%; /* Slightly lighter than background for cards */
+    --card: 230 30% 8%; /* Slightly lighter than background for cards */
     --card-foreground: 0 0% 100%;
 
-    --popover: 245 100% 12%;
+    --popover: 230 30% 8%;
     --popover-foreground: 0 0% 100%;
 
     --primary: 225 85% 57%; /* Keep primary blue consistent */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 245 100% 15%; /* Slightly lighter navy */
+    --secondary: 230 30% 7%; /* Slightly lighter near-black */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 245 100% 15%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 230 30% 7%;
+    --muted-foreground: 215 15% 70%;
 
     --accent: 158 94% 49%; /* Keep accent green consistent */
     --accent-foreground: 0 0% 100%;
@@ -84,14 +85,15 @@ All colors MUST be HSL.
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 245 100% 20%; /* Lighter border for better visibility */
-    --input: 245 100% 15%;
+    --border: 230 20% 15%; /* Lighter border for better visibility */
+    --input: 230 25% 9%;
     --ring: 225 85% 57%; /* Primary blue for focus rings */
 
     /* Dark mode specific gradients */
     --gradient-primary: linear-gradient(135deg, hsl(225 85% 57%) 0%, hsl(225 85% 47%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(158 94% 49%) 0%, hsl(158 80% 40%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(245 100% 8%) 0%, hsl(245 100% 6%) 100%);
+    /* Web3-like darker hero gradient: near-black with subtle blue tint */
+    --gradient-hero: radial-gradient(1200px_circle_at_50%_-20%, hsl(230 35% 8%) 0%, hsl(230 35% 5%) 40%, hsl(230 40% 3%) 100%);
 
     /* Dark mode shadows */
     --shadow-soft: 0 10px 40px -10px hsl(0 0% 0% / 0.3);
@@ -153,6 +155,32 @@ All colors MUST be HSL.
 
   /* Dark mode number styling */
   .dark .number-dark-accent {
+    color: #07f0a2 !important;
+  }
+
+  /* Dark mode text styling for portfolio */
+  .dark .text-dark-accent {
+    color: #07f0a2 !important;
+  }
+
+  /* Dark mode background styling for portfolio filter */
+  .dark .filter-dark-accent {
+    background-color: #07f0a2 !important;
+    color: #000000 !important;
+  }
+
+  /* Dark mode hover styling for product titles and prices */
+  .dark .hover-dark-accent:hover {
+    color: #07f0a2 !important;
+  }
+
+  /* Dark mode group hover styling for product titles */
+  .dark .group:hover .group-hover-dark-accent {
+    color: #07f0a2 !important;
+  }
+
+  /* Dark mode text styling for prices */
+  .dark .text-price-dark-accent {
     color: #07f0a2 !important;
   }
 }

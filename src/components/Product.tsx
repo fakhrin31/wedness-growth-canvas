@@ -142,7 +142,7 @@ const Product = () => {
 
                 {/* Product Info */}
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors group-hover-dark-accent">
                     {product.name}
                   </h3>
                   
@@ -189,7 +189,7 @@ const Product = () => {
                 <div className="mt-auto pt-4 border-t border-border">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <p className="font-semibold text-primary">{product.price}</p>
+                      <p className="font-semibold text-primary text-price-dark-accent">{product.price}</p>
                       {product.status === "Coming Soon" && (
                         <p className="text-xs text-muted-foreground">Expected: {product.releaseDate}</p>
                       )}

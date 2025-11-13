@@ -24,7 +24,7 @@ const Hero = () => {
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-gradient-hero opacity-90" />
+        <div className="absolute inset-0 bg-gradient-hero opacity-95" />
       </div>
 
       {/* Animated Grid Pattern */}

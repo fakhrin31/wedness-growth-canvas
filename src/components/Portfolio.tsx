@@ -99,7 +99,7 @@ const Portfolio = () => {
                 onClick={() => setFilter(category)}
                 className={`px-6 py-2 rounded-full font-medium transition-all ${
                   filter === category
-                    ? "bg-primary text-white shadow-glow"
+                    ? "bg-primary text-white shadow-glow filter-dark-accent"
                     : "bg-card text-foreground hover:bg-primary/10 border border-border"
                 }`}
               >
@@ -120,7 +120,7 @@ const Portfolio = () => {
             >
               <Card className="group cursor-pointer h-full p-6 rounded-2xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow card-dark-accent">
                 <div className="text-6xl mb-4">{project.image}</div>
-                <Badge className="mb-3 bg-primary/10 text-primary hover:bg-primary/20">
+                <Badge className="mb-3 bg-primary/10 text-primary hover:bg-primary/20 text-dark-accent">
                   {project.category}
                 </Badge>
                 <h3 className="text-xl font-bold mb-3 transition-colors">
@@ -129,7 +129,7 @@ const Portfolio = () => {
                 <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                   {project.description}
                 </p>
-                <div className="flex items-center text-primary text-sm font-medium group-hover:translate-x-1 transition-transform">
+                <div className="flex items-center text-primary text-dark-accent text-sm font-medium group-hover:translate-x-1 transition-transform">
                   View Details
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </div>
