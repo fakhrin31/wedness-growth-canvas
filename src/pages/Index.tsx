@@ -10,6 +10,7 @@ import Impact from "@/components/Impact";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import ServicePackages from "@/components/ServicePackages";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <Hero />
       <About />
       <Services />
+      <ServicePackages />
       <Approach />
       <Values />
       <Portfolio />
