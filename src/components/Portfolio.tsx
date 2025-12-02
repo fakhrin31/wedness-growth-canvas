@@ -3,77 +3,99 @@ import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Star, Copy, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 const Portfolio = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
-  const [filter, setFilter] = useState("All");
 
   const projects = [
     {
-      title: "E-Commerce Platform Optimization",
-      category: "Retail",
-      description: "Optimized checkout flow and database queries, resulting in 60% faster load times.",
-      results: ["60% faster load times", "40% increase in conversions", "Reduced server costs by 35%"],
-      tech: ["React", "Node.js", "PostgreSQL", "Redis"],
-      image: "🛒"
+      title: "E-Commerce Mobile App Redesign",
+      category: "Mobile App Development",
+      role: "Lead UI/UX Designer",
+      description: "Complete overhaul of a retail mobile app focusing on user experience and conversion optimization. We conducted extensive user research to identify pain points in the existing checkout flow. The new design implements a streamlined 3-step checkout process, improved product discovery with AI-powered recommendations, and a dark mode option. The result was a significant boost in user engagement and sales metrics within the first month of launch.",
+      image: "https://images.unsplash.com/photo-1512428559087-560fa0db79b6?q=80&w=800&auto=format&fit=crop",
+      results: ["4.8 App Store Rating", "25% Increase in Sales", "Reduced Cart Abandonment"],
+      tech: ["Flutter", "Firebase", "Stripe", "Dart", "Figma"],
+      rating: 5.0,
+      review: "Exceptional work! The new design is sleek and user-friendly. Our customers love it.",
+      publishDate: "Dec 11, 2024"
     },
     {
-      title: "Financial Analytics Dashboard",
-      category: "Finance",
-      description: "Built real-time analytics dashboard for investment tracking and risk assessment.",
-      results: ["Real-time data processing", "99.9% uptime", "Handled 1M+ transactions/day"],
-      tech: ["Next.js", "Python", "MongoDB", "AWS"],
-      image: "💹"
+      title: "Corporate Financial Dashboard",
+      category: "Web Application",
+      role: "Frontend Developer",
+      description: "Built a real-time financial data visualization dashboard for a fintech startup. The dashboard aggregates data from multiple sources and presents it in an intuitive, interactive format. Key features include customizable widgets, real-time stock tickers, and automated report generation. Performance optimization was a priority, ensuring smooth rendering of large datasets using virtualization techniques.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
+      results: ["Real-time Data Sync", "Custom Reporting", "Role-based Access"],
+      tech: ["React", "D3.js", "Node.js", "TypeScript", "Redux"],
+      rating: 5.0,
+      review: "Very professional and knowledgeable. Delivered exactly what we needed ahead of schedule.",
+      publishDate: "Nov 28, 2024"
     },
     {
-      title: "Healthcare Management System",
-      category: "Healthcare",
-      description: "Developed secure patient management system with appointment scheduling and records.",
-      results: ["HIPAA compliant", "50% admin time saved", "Zero security breaches"],
-      tech: ["Vue.js", "Django", "MySQL", "Docker"],
-      image: "🏥"
+      title: "Healthcare Patient Portal",
+      category: "Web Platform",
+      role: "Full Stack Developer",
+      description: "Developed a secure patient portal for appointment scheduling and medical record access. Security and HIPAA compliance were paramount. The system features 2FA, encrypted data storage, and a secure messaging system between patients and doctors. The UI is designed to be accessible for elderly users, with large text and clear navigation.",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=800&auto=format&fit=crop",
+      results: ["HIPAA Compliant", "Easy Scheduling", "Secure Messaging"],
+      tech: ["Next.js", "PostgreSQL", "AWS", "Docker", "TailwindCSS"],
+      rating: 4.9,
+      review: "Great attention to detail, especially regarding security and compliance. Highly recommended.",
+      publishDate: "Oct 15, 2024"
     },
     {
-      title: "EdTech Learning Platform",
-      category: "Education",
-      description: "Created interactive learning platform with video streaming and progress tracking.",
-      results: ["10K+ active users", "95% completion rate", "4.8/5 user rating"],
-      tech: ["React", "Firebase", "WebRTC", "Stripe"],
-      image: "📚"
+      title: "Travel Booking System",
+      category: "Full Stack Development",
+      role: "Backend Engineer",
+      description: "Comprehensive booking engine for a travel agency with itinerary management. The backend handles complex logic for flight and hotel availability, pricing rules, and third-party API integrations. We implemented a robust caching strategy to reduce API costs and improve response times. The system also includes an admin panel for managing bookings and content.",
+      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
+      results: ["Automated Booking", "Payment Integration", "Email Notifications"],
+      tech: ["Vue.js", "Laravel", "MySQL", "Redis", "PHP"],
+      rating: 5.0,
+      review: "Solved complex backend challenges with ease. The system is stable and fast.",
+      publishDate: "Sep 02, 2024"
     },
     {
-      title: "IoT Fleet Management",
-      category: "Tech",
-      description: "Real-time vehicle tracking and maintenance prediction system for logistics company.",
-      results: ["30% reduction in downtime", "Real-time GPS tracking", "Predictive maintenance"],
-      tech: ["Angular", "FastAPI", "TimescaleDB", "MQTT"],
-      image: "🚚"
+      title: "Smart Home IoT Interface",
+      category: "IoT / Mobile",
+      role: "Mobile Developer",
+      description: "Control interface for smart home devices with automation rules. The app communicates with IoT devices via MQTT and allows users to create custom automation scenes. We focused on low-latency communication to ensure instant feedback when controlling lights or locks. The interface is modern and supports voice commands via system integration.",
+      image: "https://images.unsplash.com/photo-1558002038-1091a166111c?q=80&w=800&auto=format&fit=crop",
+      results: ["Low Latency Control", "Voice Integration", "Energy Monitoring"],
+      tech: ["React Native", "MQTT", "Node-RED", "IoT"],
+      rating: 4.8,
+      review: "Innovative solution for our smart home product line. The app is very responsive.",
+      publishDate: "Aug 20, 2024"
     },
     {
-      title: "Restaurant POS System",
-      category: "Retail",
-      description: "Cloud-based point-of-sale system with inventory management and analytics.",
-      results: ["5x faster checkout", "Inventory waste reduced 45%", "Multi-location sync"],
-      tech: ["React Native", "Node.js", "PostgreSQL", "Vercel"],
-      image: "🍽️"
+      title: "Educational Learning Management",
+      category: "EdTech",
+      role: "Lead Developer",
+      description: "Platform for online courses with video streaming and progress tracking. Features include quizzes, assignments, and certificate generation. We used a scalable architecture to handle thousands of concurrent users during peak learning hours. The video player supports adaptive bitrate streaming for smooth playback on all devices.",
+      image: "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=800&auto=format&fit=crop",
+      results: ["Video Streaming", "Quiz System", "Certificate Generation"],
+      tech: ["MERN Stack", "AWS S3", "Socket.io", "Express"],
+      rating: 5.0,
+      review: "Delivered a robust platform that scales perfectly. Our students love the user experience.",
+      publishDate: "Jul 10, 2024"
     }
   ];
 
-  const categories = ["All", "Retail", "Finance", "Healthcare", "Education", "Tech"];
-  
-  const filteredProjects = filter === "All" 
-    ? projects 
-    : projects.filter(p => p.category === filter);
+  const handleNextProject = (currentIndex: number) => {
+    const nextIndex = (currentIndex + 1) % projects.length;
+    setSelectedProject(nextIndex);
+  };
 
   return (
     <section id="portfolio" className="section-padding bg-secondary" ref={ref}>
@@ -90,27 +112,10 @@ const Portfolio = () => {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
             Beberapa proyek yang telah kami kerjakan untuk berbagai industri
           </p>
-
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setFilter(category)}
-                className={`px-6 py-2 rounded-full font-medium transition-all ${
-                  filter === category
-                    ? "bg-primary text-white shadow-glow filter-dark-accent"
-                    : "bg-card text-foreground hover:bg-primary/10 border border-border"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((project, index) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
@@ -118,22 +123,44 @@ const Portfolio = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               onClick={() => setSelectedProject(index)}
             >
-              <Card className="group cursor-pointer h-full p-6 rounded-2xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow card-dark-accent">
-                <div className="text-6xl mb-4">{project.image}</div>
-                <Badge className="mb-3 bg-primary/10 text-primary hover:bg-primary/20 text-dark-accent">
-                  {project.category}
-                </Badge>
-                <h3 className="text-xl font-bold mb-3 transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                  {project.description}
-                </p>
-                <div className="flex items-center text-primary text-dark-accent text-sm font-medium group-hover:translate-x-1 transition-transform">
-                  View Details
-                  <ExternalLink className="ml-2 h-4 w-4" />
+              <div className="group cursor-pointer h-full bg-card rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg flex flex-col">
+                {/* Image Container */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                 </div>
-              </Card>
+
+                {/* Content */}
+                <div className="p-5 flex flex-col flex-grow">
+                  <h3 className="text-lg font-bold mb-1 group-hover:text-primary transition-colors line-clamp-1">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-3 font-medium">
+                    {project.category}
+                  </p>
+                  <p className="text-sm text-muted-foreground/80 line-clamp-2 mb-4 flex-grow">
+                    {project.description}
+                  </p>
+
+                  {/* Tech Stack Preview (First 2) */}
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {project.tech.slice(0, 2).map((t, i) => (
+                      <span key={i} className="text-xs px-2 py-1 rounded-md bg-secondary text-secondary-foreground font-medium">
+                        {t}
+                      </span>
+                    ))}
+                    {project.tech.length > 2 && (
+                      <span className="text-xs px-2 py-1 rounded-md bg-secondary text-secondary-foreground font-medium">
+                        +{project.tech.length - 2}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -141,42 +168,104 @@ const Portfolio = () => {
 
       {/* Project Detail Modal */}
       <Dialog open={selectedProject !== null} onOpenChange={() => setSelectedProject(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-5xl p-0 overflow-hidden bg-card border-border">
           {selectedProject !== null && (
-            <>
-              <DialogHeader>
-                <div className="text-6xl mb-4">{projects[selectedProject].image}</div>
-                <DialogTitle className="text-2xl">{projects[selectedProject].title}</DialogTitle>
-                <DialogDescription className="text-base">
-                  {projects[selectedProject].description}
-                </DialogDescription>
-              </DialogHeader>
-              
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-semibold mb-3 text-lg">Key Results</h4>
-                  <ul className="space-y-2">
-                    {projects[selectedProject].results.map((result, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <span className="text-primary mr-2">✓</span>
-                        <span>{result}</span>
-                      </li>
-                    ))}
-                  </ul>
+            <div className="flex flex-col h-[90vh] md:h-auto max-h-[90vh] overflow-hidden">
+              {/* Header */}
+              <div className="p-6 border-b border-border flex justify-between items-center bg-card z-10">
+                <DialogTitle className="text-xl md:text-2xl font-bold">{projects[selectedProject].title}</DialogTitle>
+                <div className="flex items-center gap-4">
+                  <button className="text-sm text-primary font-medium flex items-center gap-2 hover:underline">
+                    <Copy className="w-4 h-4" /> Copy link
+                  </button>
                 </div>
+              </div>
 
-                <div>
-                  <h4 className="font-semibold mb-3 text-lg">Technologies Used</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {projects[selectedProject].tech.map((tech, idx) => (
-                      <Badge key={idx} variant="secondary">
-                        {tech}
-                      </Badge>
-                    ))}
+              {/* Body */}
+              <div className="flex-1 overflow-y-auto p-6 md:p-8">
+                <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+                  {/* Left Column: Details */}
+                  <div className="space-y-8">
+                    <div>
+                      <h4 className="text-sm text-muted-foreground mb-1">My role</h4>
+                      <p className="font-medium text-foreground">{projects[selectedProject].role}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm text-muted-foreground mb-2">Project description</h4>
+                      <p className="text-sm leading-relaxed text-foreground/90 whitespace-pre-line">
+                        {projects[selectedProject].description}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-sm text-muted-foreground mb-3">Skills and deliverables</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {projects[selectedProject].tech.map((tech, idx) => (
+                          <Badge key={idx} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-secondary-foreground">
+                            {tech}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Review Section */}
+                    <div className="bg-secondary/20 p-5 rounded-xl border border-border/50">
+                      <h4 className="text-sm font-medium text-primary mb-2">Client Review</h4>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex text-orange-500">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className={`w-4 h-4 ${i < Math.floor(projects[selectedProject].rating) ? "fill-current" : "text-muted"}`} />
+                          ))}
+                        </div>
+                        <span className="font-bold text-foreground">{projects[selectedProject].rating}</span>
+                      </div>
+                      <p className="text-sm italic text-muted-foreground">"{projects[selectedProject].review}"</p>
+                    </div>
+
+                    <div className="text-xs text-muted-foreground pt-4 border-t border-border/50">
+                      Published on {projects[selectedProject].publishDate}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Image */}
+                  <div className="space-y-4">
+                    <div className="rounded-xl overflow-hidden border border-border bg-muted shadow-sm">
+                      <img
+                        src={projects[selectedProject].image}
+                        alt={projects[selectedProject].title}
+                        className="w-full h-auto object-cover"
+                      />
+                    </div>
+                    <p className="text-xs text-center text-muted-foreground">Project Screenshot</p>
                   </div>
                 </div>
               </div>
-            </>
+
+              {/* Footer: More by */}
+              <div className="p-6 border-t border-border bg-secondary/10">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold text-sm">More by <span className="text-primary">WednesDev</span></h4>
+                </div>
+                <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                  {projects.map((p, idx) => (
+                    idx !== selectedProject && (
+                      <div
+                        key={idx}
+                        className="flex-shrink-0 w-48 cursor-pointer group"
+                        onClick={() => setSelectedProject(idx)}
+                      >
+                        <div className="aspect-video rounded-lg overflow-hidden border border-border mb-2 relative">
+                          <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                        </div>
+                        <p className="text-xs font-medium truncate group-hover:text-primary transition-colors">{p.title}</p>
+                      </div>
+                    )
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
         </DialogContent>
       </Dialog>

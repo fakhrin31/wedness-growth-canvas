@@ -106,7 +106,7 @@ const ServicePackages = () => {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
             >
-              <div className="group relative h-full p-8 border-2 border-border hover:border-primary/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-glow cursor-pointer bg-card card-dark-accent">
+              <div className="group relative h-full p-8 border-2 border-border hover:border-primary/50 rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-glow cursor-pointer bg-card card-dark-accent flex flex-col">
                 {/* Popular Badge */}
                 {pkg.popular && (
                   <div className="absolute -top-3 right-4 bg-[rgba(7,240,162,0.12)] text-accent border border-accent/40 text-xs font-semibold px-3 py-1 rounded-full backdrop-blur">
@@ -157,7 +157,7 @@ const ServicePackages = () => {
                 </div>
 
                 {/* CTA */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mt-auto">
                   <a href="#contact" className="inline-flex items-center justify-center w-full font-semibold px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white shadow-lg transition-colors">
                     Order Now
                   </a>

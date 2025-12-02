@@ -18,7 +18,7 @@ const Footer = () => {
     ],
     Contact: [
       { name: "Hubungi Kami", href: "#contact" },
-      { name: "WhatsApp", href: "https://wa.me/6281339691260" },
+      { name: "WhatsApp", href: "https://wa.me/6282241598077" },
       { name: "Email", href: "mailto:wednesdev.id@gmail.com" },
     ],
   };

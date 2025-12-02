@@ -11,6 +11,7 @@ import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import ServicePackages from "@/components/ServicePackages";
+import ServiceAddons from "@/components/ServiceAddons";
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
       <About />
       <Services />
       <ServicePackages />
+      <ServiceAddons />
       <Approach />
       <Values />
       <Portfolio />
