@@ -178,7 +178,7 @@ const Product = () => {
                     <Badge variant="outline" className="text-xs mb-2">
                       {product.category}
                     </Badge>
-                    <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-1">
+                    <h3 className="text-lg font-bold group-hover:text-primary dark:group-hover:text-[#07F0A2] transition-colors line-clamp-1">
                       {product.name}
                     </h3>
                   </div>
@@ -227,16 +227,14 @@ const Product = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center mt-16"
+          className="text-center mt-12"
         >
-          <p className="text-lg text-muted-foreground mb-6">
-            Tidak menemukan produk yang sesuai? Kami juga menyediakan solusi kustom!
-          </p>
           <Button
-            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-            className="bg-primary hover:bg-accent text-primary-foreground font-semibold px-8 py-4 rounded-2xl shadow-lg shadow-primary/30 hover:shadow-accent/30 transition-all duration-300 hover:scale-105"
+            onClick={() => window.location.href = "/products"}
+            size="lg"
+            className="bg-primary hover:bg-accent text-primary-foreground font-semibold px-8 py-6 text-lg rounded-2xl shadow-lg shadow-primary/30 hover:shadow-accent/30 transition-all duration-300 hover:scale-105 mb-8"
           >
-            Konsultasi Solusi Kustom
+            Show More Products
           </Button>
         </motion.div>
       </div>
@@ -354,7 +352,7 @@ const Product = () => {
                           <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                         </div>
-                        <p className="text-xs font-medium truncate group-hover:text-primary transition-colors">{p.name}</p>
+                        <p className="text-xs font-medium truncate group-hover:text-primary dark:group-hover:text-[#07F0A2] transition-colors">{p.name}</p>
                       </div>
                     )
                   ))}

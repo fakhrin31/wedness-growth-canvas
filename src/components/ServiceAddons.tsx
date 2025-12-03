@@ -137,7 +137,7 @@ const ServiceAddons = () => {
                         >
                             <Card className="h-full p-6 border border-border/50 bg-card/50 backdrop-blur hover:bg-card hover:border-primary/30 transition-all duration-300">
                                 <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/50">
-                                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                                    <div className="p-2 rounded-lg bg-primary/10 text-primary dark:bg-[#07F0A2]/10 dark:text-[#07F0A2]">
                                         {category.icon}
                                     </div>
                                     <h3 className="text-xl font-bold">{category.title}</h3>
@@ -151,7 +151,7 @@ const ServiceAddons = () => {
                                                 <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
                                             </div>
                                             <div className="text-right">
-                                                <Badge variant="outline" className="whitespace-nowrap bg-background font-semibold border-primary/20 text-primary">
+                                                <Badge variant="outline" className="whitespace-nowrap bg-background font-semibold border-primary/20 text-primary dark:border-[#07F0A2]/20 dark:text-[#07F0A2]">
                                                     {item.price}
                                                 </Badge>
                                             </div>
