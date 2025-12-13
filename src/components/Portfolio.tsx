@@ -11,51 +11,47 @@ import {
   DialogHeader,
   DialogTitle,
   DialogClose,
+  DialogClose,
 } from "@/components/ui/dialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Portfolio = () => {
+  const { t } = useLanguage();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
-  const projects = [
+  const staticProjects = [
     {
-      title: "folearn.id",
-      category: "Education Technology",
-      description: "Platform pembelajaran digital sederhana (Lightweight Learning Platform) yang dirancang khusus untuk siswa SMP. Sistem ini fokus pada penyediaan akses materi pelajaran dalam bentuk teks dan video yang mudah diakses. Dibangun dengan arsitektur yang mengutamakan reliabilitas dan kemudahan penggunaan, platform ini menggunakan Strapi sebagai CMS untuk manajemen konten guru dan antarmuka web yang intuitif untuk siswa, tanpa kompleksitas fitur LMS penuh.",
       image: "/portofolio1.png",
       results: ["Content-Based LMS", "Strapi CMS Integration", "Stable & Scalable Core"],
       tech: ["React", "Strapi", "Node.js", "Video Streaming"],
       rating: 5.0,
-      review: "Platform dasar yang solid dan sangat mudah digunakan oleh guru dan siswa. Fokus pada konten materi tersampaikan dengan baik.",
       publishDate: "2024",
       link: "https://folearn.id"
     },
     {
-      title: "Sinergi UMKM Indonesia",
-      category: "SME Enabler Platform",
-      description: "Platform konsultan dan enabler berbasis teknologi tinggi untuk akselerasi UMKM Indonesia. Mengintegrasikan ekosistem lengkap mulai dari AI-powered Self-Assessment untuk mengukur kesiapan usaha, Dashboard personal, LMS untuk pelatihan, hingga akses ke pembiayaan (Financing Hub) dan pasar ekspor (Export Hub). Solusi komprehensif untuk digitalisasi, pendampingan, dan pertumbuhan bisnis UMKM.",
       image: "/portofolio2.png",
       results: ["AI Assessment Engine", "Integrated Ecosystem", "Multi-Hub Architecture"],
       tech: ["Next.js", "NestJS", "PostgreSQL", "Python AI", "AWS"],
       rating: 5.0,
-      review: "Solusi digital terlengkap untuk UMKM. Fitur assessment dan roadmap-nya sangat membantu pemetaan bisnis.",
       publishDate: "2024",
       link: "https://sinergiumkmindonesia.com"
     },
     {
-      title: "Whatsapp Scrapper",
-      category: "Customer Service Integration",
-      description: "Fitur integrasi WhatsApp ke Sistem Customer Service (CS) yang memungkinkan pengelolaan pesan secara terpusat dan real-time. Sistem ini menyediakan saluran komunikasi omnichannel, dashboard agent interaktif, dan penyimpanan riwayat chat terstruktur. Fitur utama meliputi inbound/outbound messaging, manajemen antrian chat, dan logging otomatis untuk monitoring kualitas layanan.",
       image: "/portofolio3.png",
       results: ["Omnichannel Integration", "Real-time Dashboard", "Automated Logging"],
       tech: ["WhatsApp API", "WebSocket", "Node.js", "MySQL", "React"],
       rating: 5.0,
-      review: "Sangat membantu tim CS kami dalam mengelola ribuan pesan pelanggan setiap hari dengan efisien.",
       publishDate: "2024",
       link: "https://pull-whatsapp.vercel.app/"
     }
   ];
+
+  const projects = (t('portfolio.items') || []).map((item: any, index: number) => ({
+    ...item,
+    ...(staticProjects[index] || {})
+  }));
 
   const handleNextProject = (currentIndex: number) => {
     const nextIndex = (currentIndex + 1) % projects.length;
@@ -75,7 +71,7 @@ const Portfolio = () => {
             Portfolio <span className="text-gradient">Projects</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Beberapa proyek yang telah kami kerjakan untuk berbagai industri
+            {t('portfolio.subtitle')}
           </p>
         </motion.div>
 
@@ -147,7 +143,7 @@ const Portfolio = () => {
                     onClick={() => window.open(projects[selectedProject].link, "_blank")}
                   >
                     <Globe className="w-4 h-4 mr-2" />
-                    Visit Website
+                    {t('portfolio.modal.visitWebsite')} ({projects[selectedProject].title})
                   </Button>
                 </div>
               </div>
@@ -159,14 +155,14 @@ const Portfolio = () => {
                   <div className="space-y-8">
 
                     <div>
-                      <h4 className="text-sm text-muted-foreground mb-2">Project description</h4>
+                      <h4 className="text-sm text-muted-foreground mb-2">{t('portfolio.modal.description')}</h4>
                       <p className="text-sm leading-relaxed text-foreground/90 whitespace-pre-line">
                         {projects[selectedProject].description}
                       </p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm text-muted-foreground mb-3">Skills and deliverables</h4>
+                      <h4 className="text-sm text-muted-foreground mb-3">{t('portfolio.modal.skills')}</h4>
                       <div className="flex flex-wrap gap-2">
                         {projects[selectedProject].tech.map((tech, idx) => (
                           <Badge key={idx} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-secondary-foreground">
@@ -183,12 +179,12 @@ const Portfolio = () => {
                       onClick={() => window.open(projects[selectedProject].link, "_blank")}
                     >
                       <Globe className="w-4 h-4 mr-2" />
-                      Visit Website
+                      {t('portfolio.modal.visitWebsite')}
                     </Button>
 
                     {/* Review Section */}
                     <div className="bg-secondary/20 p-5 rounded-xl border border-border/50">
-                      <h4 className="text-sm font-medium text-primary mb-2">Client Review</h4>
+                      <h4 className="text-sm font-medium text-primary mb-2">{t('portfolio.modal.clientReview')}</h4>
                       <div className="flex items-center gap-2 mb-2">
                         <div className="flex text-orange-500">
                           {[...Array(5)].map((_, i) => (
@@ -201,7 +197,7 @@ const Portfolio = () => {
                     </div>
 
                     <div className="text-xs text-muted-foreground pt-4 border-t border-border/50">
-                      Published on {projects[selectedProject].publishDate}
+                      {t('portfolio.modal.publishedOn')} {projects[selectedProject].publishDate}
                     </div>
                   </div>
 
@@ -214,7 +210,7 @@ const Portfolio = () => {
                         className="w-full h-auto object-cover"
                       />
                     </div>
-                    <p className="text-xs text-center text-muted-foreground">Project Screenshot</p>
+                    <p className="text-xs text-center text-muted-foreground">{t('portfolio.modal.screenshot')}</p>
                   </div>
                 </div>
               </div>
@@ -222,7 +218,7 @@ const Portfolio = () => {
               {/* Footer: More by */}
               <div className="p-6 border-t border-border bg-secondary/10">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold text-sm">More by <span className="text-primary">WednesDev</span></h4>
+                  <h4 className="font-semibold text-sm">{t('portfolio.modal.moreBy')} <span className="text-primary">WednesDev</span></h4>
                 </div>
                 <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                   {projects.map((p, idx) => (

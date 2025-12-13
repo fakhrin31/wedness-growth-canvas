@@ -11,17 +11,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Product = () => {
+  const { t } = useLanguage();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
 
-  const products = [
+  const staticProducts = [
     {
       id: 1,
-      name: "ERP System Pro",
-      description: "Sistem manajemen sumber daya perusahaan yang komprehensif untuk mengoptimalkan operasional bisnis Anda. Modul lengkap mencakup Keuangan, HR, Inventori, dan Penjualan.",
       category: "Enterprise Software",
       price: "Mulai dari Rp 15.000.000",
       rating: 4.9,
@@ -31,13 +31,10 @@ const Product = () => {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
       demoUrl: "#",
       status: "Available",
-      review: "Sistem ERP terbaik yang pernah kami gunakan. Sangat membantu efisiensi operasional.",
       role: "Enterprise Solution"
     },
     {
       id: 2,
-      name: "Smart Inventory Manager",
-      description: "Solusi manajemen inventori cerdas dengan AI untuk prediksi stok dan otomatisasi pemesanan. Hindari kehabisan stok dan overstock dengan algoritma prediksi canggih kami.",
       category: "Inventory Management",
       price: "Mulai dari Rp 8.500.000",
       rating: 4.8,
@@ -47,13 +44,10 @@ const Product = () => {
       image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop",
       demoUrl: "#",
       status: "Available",
-      review: "Fitur prediksi AI-nya sangat akurat. Kami menghemat biaya penyimpanan hingga 30%.",
       role: "Inventory Solution"
     },
     {
       id: 3,
-      name: "Customer Analytics Suite",
-      description: "Platform analitik pelanggan untuk memahami perilaku dan meningkatkan engagement. Dapatkan wawasan mendalam tentang perjalanan pelanggan Anda dari akuisisi hingga retensi.",
       category: "Analytics",
       price: "Mulai dari Rp 12.000.000",
       rating: 4.7,
@@ -63,13 +57,10 @@ const Product = () => {
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
       demoUrl: "#",
       status: "Available",
-      review: "Dashboard yang sangat intuitif. Membantu kami membuat keputusan berbasis data.",
       role: "Analytics Platform"
     },
     {
       id: 4,
-      name: "Digital Workflow Automation",
-      description: "Otomatisasi alur kerja digital untuk meningkatkan efisiensi dan mengurangi kesalahan manual. Buat workflow custom tanpa coding dengan drag-and-drop interface.",
       category: "Automation",
       price: "Mulai dari Rp 10.000.000",
       rating: 4.9,
@@ -79,13 +70,10 @@ const Product = () => {
       image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
       demoUrl: "#",
       status: "Available",
-      review: "Mengubah cara kerja tim kami menjadi jauh lebih produktif dan terorganisir.",
       role: "Automation Tool"
     },
     {
       id: 5,
-      name: "E-Commerce Platform Plus",
-      description: "Platform e-commerce lengkap dengan fitur advanced untuk bisnis online modern. Dukung pertumbuhan bisnis Anda dengan fitur marketing tools dan integrasi marketplace.",
       category: "E-Commerce",
       price: "Mulai dari Rp 20.000.000",
       rating: 4.8,
@@ -95,13 +83,10 @@ const Product = () => {
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=800&auto=format&fit=crop",
       demoUrl: "#",
       status: "Available",
-      review: "Platform yang stabil dan kaya fitur. Penjualan kami meningkat signifikan.",
       role: "E-Commerce Solution"
     },
     {
       id: 6,
-      name: "AI Business Intelligence",
-      description: "Sistem business intelligence dengan AI untuk insight mendalam dan decision making yang lebih baik. Analisis tren pasar dan performa bisnis secara real-time.",
       category: "Business Intelligence",
       price: "Coming Soon",
       rating: 0,
@@ -111,10 +96,14 @@ const Product = () => {
       image: "https://images.unsplash.com/photo-1488229297570-58520851e868?q=80&w=800&auto=format&fit=crop",
       demoUrl: "#",
       status: "Coming Soon",
-      review: "Coming Soon",
       role: "AI Platform"
     }
   ];
+
+  const products = (t('products.items') || []).map((item: any, index: number) => ({
+    ...item,
+    ...(staticProducts[index] || {})
+  }));
 
   const handleDemoClick = (e: React.MouseEvent, productName: string) => {
     e.stopPropagation();
@@ -134,11 +123,10 @@ const Product = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Katalog <span className="text-gradient">Produk Kami</span>
+            <span className="text-gradient">{t('products.title')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Jelajahi koleksi lengkap solusi teknologi yang telah kami kembangkan untuk berbagai kebutuhan bisnis.
-            Setiap produk dirancang dengan teknologi terdepan dan telah terbukti memberikan hasil nyata.
+            {t('products.subtitle')}
           </p>
         </motion.div>
 
@@ -167,7 +155,7 @@ const Product = () => {
                       variant={product.status === "Available" ? "default" : "secondary"}
                       className={product.status === "Available" ? "bg-primary text-primary-foreground" : "bg-background/80 backdrop-blur text-foreground"}
                     >
-                      {product.status}
+                      {product.status === "Available" ? t('products.status.available') : t('products.status.comingSoon')}
                     </Badge>
                   </div>
                 </div>
@@ -213,7 +201,7 @@ const Product = () => {
                       size="sm"
                     >
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      {product.status === "Available" ? "Request Demo" : "Notify Me"}
+                      {product.status === "Available" ? t('products.requestDemo') : t('products.notifyMe')}
                     </Button>
                   </div>
                 </div>
@@ -234,7 +222,7 @@ const Product = () => {
             size="lg"
             className="bg-primary hover:bg-accent text-primary-foreground font-semibold px-8 py-6 text-lg rounded-2xl shadow-lg shadow-primary/30 hover:shadow-accent/30 transition-all duration-300 hover:scale-105 mb-8"
           >
-            Show More Products
+            {t('products.showMore')}
           </Button>
         </motion.div>
       </div>
@@ -260,19 +248,19 @@ const Product = () => {
                   {/* Left Column: Details */}
                   <div className="space-y-8">
                     <div>
-                      <h4 className="text-sm text-muted-foreground mb-1">Category</h4>
+                      <h4 className="text-sm text-muted-foreground mb-1">{t('products.category')}</h4>
                       <p className="font-medium text-foreground">{selectedProductData.role}</p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm text-muted-foreground mb-2">Description</h4>
+                      <h4 className="text-sm text-muted-foreground mb-2">{t('products.description')}</h4>
                       <p className="text-sm leading-relaxed text-foreground/90 whitespace-pre-line">
                         {selectedProductData.description}
                       </p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm text-muted-foreground mb-3">Key Features</h4>
+                      <h4 className="text-sm text-muted-foreground mb-3">{t('products.keyFeatures')}</h4>
                       <div className="flex flex-wrap gap-2">
                         {selectedProductData.features.map((feature, idx) => (
                           <Badge key={idx} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-secondary-foreground">
@@ -285,14 +273,14 @@ const Product = () => {
                     {/* Stats & Review */}
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-secondary/20 p-4 rounded-xl border border-border/50">
-                        <h4 className="text-xs font-medium text-muted-foreground mb-1">Rating</h4>
+                        <h4 className="text-xs font-medium text-muted-foreground mb-1">{t('products.rating')}</h4>
                         <div className="flex items-center gap-2">
                           <Star className="w-4 h-4 fill-orange-500 text-orange-500" />
                           <span className="font-bold">{selectedProductData.rating}</span>
                         </div>
                       </div>
                       <div className="bg-secondary/20 p-4 rounded-xl border border-border/50">
-                        <h4 className="text-xs font-medium text-muted-foreground mb-1">Active Users</h4>
+                        <h4 className="text-xs font-medium text-muted-foreground mb-1">{t('products.activeUsers')}</h4>
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4 text-primary" />
                           <span className="font-bold">{selectedProductData.users}</span>
@@ -302,13 +290,13 @@ const Product = () => {
 
                     {selectedProductData.review && (
                       <div className="bg-secondary/20 p-5 rounded-xl border border-border/50">
-                        <h4 className="text-sm font-medium text-primary mb-2">User Feedback</h4>
+                        <h4 className="text-sm font-medium text-primary mb-2">{t('products.userFeedback')}</h4>
                         <p className="text-sm italic text-muted-foreground">"{selectedProductData.review}"</p>
                       </div>
                     )}
 
                     <div className="text-xs text-muted-foreground pt-4 border-t border-border/50">
-                      Released in {selectedProductData.releaseDate}
+                      {t('products.releasedIn')} {selectedProductData.releaseDate}
                     </div>
                   </div>
 
@@ -327,8 +315,7 @@ const Product = () => {
                         className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg w-full md:w-auto px-8"
                         disabled={selectedProductData.status === "Coming Soon"}
                       >
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        {selectedProductData.status === "Available" ? "Request Demo / Consult" : "Notify Me"}
+                        {selectedProductData.status === "Available" ? t('products.consult') : t('products.notifyMe')}
                       </Button>
                     </div>
                   </div>
@@ -338,7 +325,7 @@ const Product = () => {
               {/* Footer: More Products */}
               <div className="p-6 border-t border-border bg-secondary/10">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold text-sm">More <span className="text-primary">Products</span></h4>
+                  <h4 className="font-semibold text-sm">{t('products.moreProducts')}</h4>
                 </div>
                 <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                   {products.map((p, idx) => (

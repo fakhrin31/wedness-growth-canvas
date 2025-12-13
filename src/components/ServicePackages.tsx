@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type PackageItem = {
   name: string;
@@ -11,72 +12,9 @@ type PackageItem = {
   popular?: boolean;
 };
 
-const PACKAGES: PackageItem[] = [
-  {
-    name: "Starter",
-    priceLabel: "Rp 5.000.000",
-    target: "Untuk landing page & company profile",
-    features: [
-      "PRD mini & konsultasi",
-      "UI/UX basic (1–2 layar)",
-      "Development 1 halaman",
-      "Testing & deployment",
-      "1x revisi minor",
-      "Project PIC & laporan",
-    ],
-    duration: "1 Bulan",
-    optionalNote: "Opsional: Maintenance Rp 250.000/meeting",
-  },
-  {
-    name: "Growth / Startup",
-    priceLabel: "Rp 15.000.000 – 20.000.000",
-    target: "Untuk sistem kecil & dashboard dasar",
-    features: [
-      "PRD standard",
-      "UI/UX 5–7 layar",
-      "Frontend + backend CRUD & auth",
-      "API dasar",
-      "Testing & QA",
-      "2x revisi fungsional",
-      "Deployment & server setup",
-      "Project PIC",
-    ],
-    duration: "3 Bulan",
-    optionalNote: "Opsional: Maintenance modul Rp 500.000 – 800.000",
-  },
-  {
-    name: "Complex System",
-    priceLabel: "Rp 35.000.000 – 40.000.000",
-    target: "Untuk sistem menengah–besar, multi-role, integrasi API",
-    features: [
-      "PRD advanced (10–20 halaman)",
-      "UI/UX system design (10–20 layar)",
-      "Frontend & backend lengkap",
-      "Integrasi API / Payment / Chat",
-      "User testing",
-      "VPS/Docker deployment",
-      "3x revisi fungsional",
-      "Training & dokumentasi",
-    ],
-    duration: "6 Bulan",
-    optionalNote: "Opsional: Maintenance Rp 1.000.000 – 2.000.000/bulan",
-  },
-  {
-    name: "Enterprise / Custom",
-    priceLabel: "Custom (by request)",
-    target: "Sistem skala besar, integrasi penuh, project khusus lembaga & korporasi",
-    features: [
-      "Business consulting",
-      "Full PRD workshop",
-      "Multi-team development",
-      "Infrastruktur skala besar",
-      "SLA & support prioritas",
-    ],
-    duration: "Disepakati bersama",
-  },
-];
-
 const ServicePackages = () => {
+  const { t } = useLanguage();
+  const packages = t('packages.items') || [];
   return (
     <section id="service-packages" className="section-padding bg-background relative overflow-hidden">
       {/* Section Header */}
@@ -89,16 +27,16 @@ const ServicePackages = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="text-gradient">Our Service Packages</span>
+            <span className="text-gradient">{t('packages.title')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Choose the perfect plan to kickstart your digital journey.
+            {t('packages.subtitle')}
           </p>
         </motion.div>
 
         {/* Packages Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {PACKAGES.map((pkg, idx) => (
+          {packages.map((pkg: any, idx: number) => (
             <motion.div
               key={pkg.name}
               initial={{ opacity: 0, y: 40 }}

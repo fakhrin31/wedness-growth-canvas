@@ -4,11 +4,13 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,14 +23,14 @@ const Navigation = () => {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/#about" },
-    { name: "Services", href: "/#services" },
-    { name: "Portfolio", href: "/#portfolio" },
-    { name: "Products", href: "/products" },
-    { name: "Blog", href: "/blog" },
-    { name: "Learn", href: "/learn" },
-    { name: "Contact", href: "/#contact" },
+    { name: t("nav.home"), href: "/" },
+    { name: t("nav.about"), href: "/#about" },
+    { name: t("nav.services"), href: "/#services" },
+    { name: t("nav.portfolio"), href: "/#portfolio" },
+    { name: t("nav.products"), href: "/products" },
+    { name: t("nav.blog"), href: "/blog" },
+    { name: t("nav.learn"), href: "/learn" },
+    { name: t("nav.contact"), href: "/#contact" },
   ];
 
   const handleNavClick = (href: string) => {
@@ -66,8 +68,8 @@ const Navigation = () => {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-            ? "bg-[#0A0031]/95 backdrop-blur-md shadow-soft border-b border-border"
-            : "bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm"
+          ? "bg-[#0A0031]/95 backdrop-blur-md shadow-soft border-b border-border"
+          : "bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-sm"
           }`}
       >
         <div className="container-custom">
@@ -122,12 +124,27 @@ const Navigation = () => {
                 )}
               </Button>
 
-              <Button
-                onClick={() => handleNavClick("/#contact")}
-                className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white font-semibold px-6 rounded-xl shadow-lg"
-              >
-                Get Started
-              </Button>
+              <div className="flex items-center bg-white/10 rounded-lg p-1 ml-4 border border-white/10">
+                <button
+                  onClick={() => setLanguage('ID')}
+                  className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all duration-300 ${language === 'ID'
+                      ? 'bg-accent text-[#111218] shadow-sm'
+                      : 'text-white hover:text-accent'
+                    }`}
+                >
+                  ID
+                </button>
+                <div className="w-[1px] h-4 bg-white/20 mx-1"></div>
+                <button
+                  onClick={() => setLanguage('EN')}
+                  className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all duration-300 ${language === 'EN'
+                      ? 'bg-accent text-[#111218] shadow-sm'
+                      : 'text-white hover:text-accent'
+                    }`}
+                >
+                  EN
+                </button>
+              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -184,12 +201,26 @@ const Navigation = () => {
                   {link.name}
                 </a>
               ))}
-              <Button
-                onClick={() => handleNavClick("/#contact")}
-                className="w-full bg-accent hover:bg-[hsl(var(--accent-hover))] text-white font-semibold py-6 rounded-xl"
-              >
-                Get Started
-              </Button>
+              <div className="flex w-full items-center justify-center bg-accent/10 rounded-xl p-2 mt-4">
+                <button
+                  onClick={() => setLanguage('ID')}
+                  className={`flex-1 py-3 rounded-lg text-base font-semibold transition-all duration-300 ${language === 'ID'
+                      ? 'bg-accent text-[#111218] shadow-md'
+                      : 'text-foreground hover:text-accent'
+                    }`}
+                >
+                  Indonesian
+                </button>
+                <button
+                  onClick={() => setLanguage('EN')}
+                  className={`flex-1 py-3 rounded-lg text-base font-semibold transition-all duration-300 ${language === 'EN'
+                      ? 'bg-accent text-[#111218] shadow-md'
+                      : 'text-foreground hover:text-accent'
+                    }`}
+                >
+                  English
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
