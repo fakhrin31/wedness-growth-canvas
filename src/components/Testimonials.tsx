@@ -11,47 +11,15 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTestimonials } from "@/hooks/useTestimonials";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Testimonials = () => {
   const { t } = useLanguage();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const staticTestimonials = [
-    {
-      name: "Budi Santoso",
-      role: "CTO",
-      company: "TechCorp Indonesia",
-      rating: 5,
-      avatar: "👨‍💼"
-    },
-    {
-      name: "Sarah Wijaya",
-      role: "Founder & CEO",
-      company: "StartupHub",
-      rating: 5,
-      avatar: "👩‍💼"
-    },
-    {
-      name: "Andi Prasetyo",
-      role: "Product Manager",
-      company: "E-Commerce Plus",
-      rating: 5,
-      avatar: "👨‍💻"
-    },
-    {
-      name: "Linda Kusuma",
-      role: "Operations Director",
-      company: "LogisTech Solutions",
-      rating: 5,
-      avatar: "👩‍🔬"
-    }
-  ];
-
-  const testimonials = (t('testimonials.items') || []).map((item: any, index: number) => ({
-    ...item,
-    ...(staticTestimonials[index] || {})
-  }));
+  const { data: testimonials, isLoading } = useTestimonials();
 
   return (
     <section id="testimonials" className="section-padding bg-background" ref={ref}>
@@ -76,46 +44,53 @@ const Testimonials = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-5xl mx-auto"
         >
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent>
-              {testimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/2">
-                  <Card className="p-8 h-full rounded-2xl border-2 border-border hover:border-primary/50 transition-all duration-300 card-dark-accent">
-                    {/* Rating Stars */}
-                    <div className="flex gap-1 mb-4">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-5 w-5 fill-accent text-accent" />
-                      ))}
-                    </div>
-
-                    {/* Testimonial Text */}
-                    <p className="text-muted-foreground mb-6 leading-relaxed italic">
-                      "{testimonial.testimonial}"
-                    </p>
-
-                    {/* Author Info */}
-                    <div className="flex items-center gap-4">
-                      <div className="text-4xl">{testimonial.avatar}</div>
-                      <div>
-                        <h4 className="font-bold">{testimonial.name}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {testimonial.role} at {testimonial.company}
-                        </p>
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 gap-8">
+              <Skeleton className="h-[200px] w-full rounded-xl" />
+              <Skeleton className="h-[200px] w-full rounded-xl hidden md:block" />
+            </div>
+          ) : (
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent>
+                {testimonials?.map((testimonial, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/2">
+                    <Card className="p-8 h-full rounded-2xl border-2 border-border hover:border-primary/50 transition-all duration-300 card-dark-accent">
+                      {/* Rating Stars */}
+                      <div className="flex gap-1 mb-4">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="h-5 w-5 fill-accent text-accent" />
+                        ))}
                       </div>
-                    </div>
-                  </Card>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
+
+                      {/* Testimonial Text */}
+                      <p className="text-muted-foreground mb-6 leading-relaxed italic">
+                        "{testimonial.testimonial}"
+                      </p>
+
+                      {/* Author Info */}
+                      <div className="flex items-center gap-4">
+                        <div className="text-4xl">{testimonial.avatar}</div>
+                        <div>
+                          <h4 className="font-bold">{testimonial.name}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {testimonial.role} at {testimonial.company}
+                          </p>
+                        </div>
+                      </div>
+                    </Card>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
+          )}
         </motion.div>
 
         {/* Client Logos */}

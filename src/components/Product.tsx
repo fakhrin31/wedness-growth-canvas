@@ -8,110 +8,31 @@ import { useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProducts } from "@/hooks/useProducts";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Product = () => {
   const { t } = useLanguage();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
-  const staticProducts = [
-    {
-      id: 1,
-      category: "Enterprise Software",
-      price: "Mulai dari Rp 15.000.000",
-      rating: 4.9,
-      users: "500+",
-      releaseDate: "2024",
-      features: ["Multi-user Access", "Real-time Analytics", "Cloud Integration", "Mobile App"],
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
-      demoUrl: "#",
-      status: "Available",
-      role: "Enterprise Solution"
-    },
-    {
-      id: 2,
-      category: "Inventory Management",
-      price: "Mulai dari Rp 8.500.000",
-      rating: 4.8,
-      users: "300+",
-      releaseDate: "2024",
-      features: ["AI Prediction", "Barcode Scanner", "Auto Reorder", "Multi-warehouse"],
-      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=800&auto=format&fit=crop",
-      demoUrl: "#",
-      status: "Available",
-      role: "Inventory Solution"
-    },
-    {
-      id: 3,
-      category: "Analytics",
-      price: "Mulai dari Rp 12.000.000",
-      rating: 4.7,
-      users: "250+",
-      releaseDate: "2024",
-      features: ["Behavior Tracking", "Segmentation", "Predictive Analytics", "Dashboard"],
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
-      demoUrl: "#",
-      status: "Available",
-      role: "Analytics Platform"
-    },
-    {
-      id: 4,
-      category: "Automation",
-      price: "Mulai dari Rp 10.000.000",
-      rating: 4.9,
-      users: "400+",
-      releaseDate: "2024",
-      features: ["Process Automation", "Integration APIs", "Custom Workflows", "Monitoring"],
-      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
-      demoUrl: "#",
-      status: "Available",
-      role: "Automation Tool"
-    },
-    {
-      id: 5,
-      category: "E-Commerce",
-      price: "Mulai dari Rp 20.000.000",
-      rating: 4.8,
-      users: "600+",
-      releaseDate: "2024",
-      features: ["Multi-vendor", "Payment Gateway", "SEO Optimized", "Mobile Responsive"],
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=800&auto=format&fit=crop",
-      demoUrl: "#",
-      status: "Available",
-      role: "E-Commerce Solution"
-    },
-    {
-      id: 6,
-      category: "Business Intelligence",
-      price: "Coming Soon",
-      rating: 0,
-      users: "0",
-      releaseDate: "Q2 2025",
-      features: ["AI Insights", "Predictive Models", "Data Visualization", "Real-time Reports"],
-      image: "https://images.unsplash.com/photo-1488229297570-58520851e868?q=80&w=800&auto=format&fit=crop",
-      demoUrl: "#",
-      status: "Coming Soon",
-      role: "AI Platform"
-    }
-  ];
+  const { data: products, isLoading } = useProducts();
 
-  const products = (t('products.items') || []).map((item: any, index: number) => ({
-    ...item,
-    ...(staticProducts[index] || {})
-  }));
-
-  const handleDemoClick = (e: React.MouseEvent, productName: string) => {
+  const handleActionClick = (e: React.MouseEvent, product: any) => {
     e.stopPropagation();
-    const message = encodeURIComponent(`Halo WednesDev, saya tertarik untuk melihat demo dari ${productName}. Bisakah kita jadwalkan presentasi?`);
+    if (product.product_url) {
+      window.open(product.product_url, "_blank");
+      return;
+    }
+    const message = encodeURIComponent(`Halo WednesDev, saya tertarik untuk melihat demo dari ${product.name}. Bisakah kita jadwalkan presentasi?`);
     window.open(`https://wa.me/6281234567890?text=${message}`, "_blank");
   };
 
-  const selectedProductData = selectedProduct !== null ? products.find(p => p.id === selectedProduct) : null;
+  const selectedProductData = selectedProductId !== null ? products?.find(p => p.id === selectedProductId) : null;
 
   return (
     <section id="products" className="section-padding bg-background" ref={ref}>
@@ -130,85 +51,103 @@ const Product = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              onClick={() => setSelectedProduct(product.id)}
-            >
-              <div className="group h-full bg-card rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg flex flex-col cursor-pointer">
-                {/* Image Container */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-
-                  {/* Status Badge */}
-                  <div className="absolute top-3 right-3">
-                    <Badge
-                      variant={product.status === "Available" ? "default" : "secondary"}
-                      className={product.status === "Available" ? "bg-primary text-primary-foreground" : "bg-background/80 backdrop-blur text-foreground"}
-                    >
-                      {product.status === "Available" ? t('products.status.available') : t('products.status.comingSoon')}
-                    </Badge>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex flex-col flex-grow">
-                  <div className="mb-2">
-                    <Badge variant="outline" className="text-xs mb-2">
-                      {product.category}
-                    </Badge>
-                    <h3 className="text-lg font-bold group-hover:text-primary dark:group-hover:text-[#07F0A2] transition-colors line-clamp-1">
-                      {product.name}
-                    </h3>
-                  </div>
-
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-grow">
-                    {product.description}
-                  </p>
-
-                  {/* Features */}
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {product.features.slice(0, 3).map((feature, idx) => (
-                      <span key={idx} className="text-xs px-2 py-1 rounded-md bg-secondary text-secondary-foreground font-medium">
-                        {feature}
-                      </span>
-                    ))}
-                    {product.features.length > 3 && (
-                      <span className="text-xs px-2 py-1 rounded-md bg-secondary text-secondary-foreground font-medium">
-                        +{product.features.length - 3}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Footer */}
-                  <div className="pt-4 border-t border-border mt-auto">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="font-bold text-primary text-price-dark-accent">{product.price}</p>
-                    </div>
-                    <Button
-                      onClick={(e) => handleDemoClick(e, product.name)}
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
-                      disabled={product.status === "Coming Soon"}
-                      size="sm"
-                    >
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      {product.status === "Available" ? t('products.requestDemo') : t('products.notifyMe')}
-                    </Button>
-                  </div>
+        {isLoading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-[400px] rounded-xl overflow-hidden border border-border bg-card">
+                <Skeleton className="h-[200px] w-full" />
+                <div className="p-5 space-y-4">
+                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-20 w-full" />
+                  <Skeleton className="h-10 w-full" />
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products?.slice(0, 6).map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                onClick={() => setSelectedProductId(product.id)}
+              >
+                <div className="group h-full bg-card rounded-xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg flex flex-col cursor-pointer">
+                  {/* Image Container */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+
+                    {/* Status Badge */}
+                    <div className="absolute top-3 right-3">
+                      <Badge
+                        variant={product.status === "available" ? "default" : "secondary"}
+                        className={product.status === "available" ? "bg-primary text-primary-foreground" : "bg-background/80 backdrop-blur text-foreground"}
+                      >
+                        {product.status === "available" ? t('products.status.available') : t('products.status.comingSoon')}
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-5 flex flex-col flex-grow">
+                    <div className="mb-2">
+                      <Badge variant="outline" className="text-xs mb-2">
+                        {product.category}
+                      </Badge>
+                      <h3 className="text-lg font-bold group-hover:text-primary dark:group-hover:text-[#07F0A2] transition-colors line-clamp-1">
+                        {product.name}
+                      </h3>
+                    </div>
+
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-grow">
+                      {product.description}
+                    </p>
+
+                    {/* Features */}
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {product.features?.slice(0, 3).map((feature, idx) => (
+                        <span key={idx} className="text-xs px-2 py-1 rounded-md bg-secondary text-secondary-foreground font-medium">
+                          {feature}
+                        </span>
+                      ))}
+                      {product.features && product.features.length > 3 && (
+                        <span className="text-xs px-2 py-1 rounded-md bg-secondary text-secondary-foreground font-medium">
+                          +{product.features.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="pt-4 border-t border-border mt-auto">
+                      <div className="flex items-center justify-between mb-3">
+                        <p className="font-bold text-primary text-price-dark-accent">{product.price}</p>
+                      </div>
+                      <Button
+                        onClick={(e) => handleActionClick(e, product)}
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
+                        disabled={product.status === "coming_soon"}
+                        size="sm"
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        {product.status === "available"
+                          ? (product.product_url ? t('products.visit') || "Visit Product" : t('products.requestDemo'))
+                          : t('products.notifyMe')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {/* Call to Action */}
         <motion.div
@@ -228,7 +167,7 @@ const Product = () => {
       </div>
 
       {/* Product Detail Modal */}
-      <Dialog open={selectedProduct !== null} onOpenChange={() => setSelectedProduct(null)}>
+      <Dialog open={selectedProductId !== null} onOpenChange={() => setSelectedProductId(null)}>
         <DialogContent className="max-w-5xl p-0 overflow-hidden bg-card border-border">
           {selectedProductData && (
             <div className="flex flex-col h-[90vh] md:h-auto max-h-[90vh] overflow-hidden">
@@ -262,7 +201,7 @@ const Product = () => {
                     <div>
                       <h4 className="text-sm text-muted-foreground mb-3">{t('products.keyFeatures')}</h4>
                       <div className="flex flex-wrap gap-2">
-                        {selectedProductData.features.map((feature, idx) => (
+                        {selectedProductData.features?.map((feature, idx) => (
                           <Badge key={idx} variant="secondary" className="bg-secondary/50 hover:bg-secondary text-secondary-foreground">
                             {feature}
                           </Badge>
@@ -296,7 +235,7 @@ const Product = () => {
                     )}
 
                     <div className="text-xs text-muted-foreground pt-4 border-t border-border/50">
-                      {t('products.releasedIn')} {selectedProductData.releaseDate}
+                      {t('products.releasedIn')} {selectedProductData.release_date}
                     </div>
                   </div>
 
@@ -304,18 +243,20 @@ const Product = () => {
                   <div className="space-y-4">
                     <div className="rounded-xl overflow-hidden border border-border bg-muted shadow-sm">
                       <img
-                        src={selectedProductData.image}
+                        src={selectedProductData.image_url}
                         alt={selectedProductData.name}
                         className="w-full h-auto object-cover"
                       />
                     </div>
                     <div className="flex justify-center">
                       <Button
-                        onClick={(e) => handleDemoClick(e, selectedProductData.name)}
+                        onClick={(e) => handleActionClick(e, selectedProductData)}
                         className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg w-full md:w-auto px-8"
-                        disabled={selectedProductData.status === "Coming Soon"}
+                        disabled={selectedProductData.status === "coming_soon"}
                       >
-                        {selectedProductData.status === "Available" ? t('products.consult') : t('products.notifyMe')}
+                        {selectedProductData.status === "available"
+                          ? (selectedProductData.product_url ? t('products.visit') || "Visit Product" : t('products.consult'))
+                          : t('products.notifyMe')}
                       </Button>
                     </div>
                   </div>
@@ -328,15 +269,15 @@ const Product = () => {
                   <h4 className="font-semibold text-sm">{t('products.moreProducts')}</h4>
                 </div>
                 <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                  {products.map((p, idx) => (
-                    p.id !== selectedProduct && (
+                  {products?.map((p, idx) => (
+                    p.id !== selectedProductId && (
                       <div
                         key={p.id}
                         className="flex-shrink-0 w-48 cursor-pointer group"
-                        onClick={() => setSelectedProduct(p.id)}
+                        onClick={() => setSelectedProductId(p.id)}
                       >
                         <div className="aspect-video rounded-lg overflow-hidden border border-border mb-2 relative">
-                          <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                          <img src={p.image_url} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                         </div>
                         <p className="text-xs font-medium truncate group-hover:text-primary dark:group-hover:text-[#07F0A2] transition-colors">{p.name}</p>
