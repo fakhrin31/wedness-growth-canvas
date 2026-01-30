@@ -85,6 +85,7 @@ export interface User {
 export interface BlogPost {
     id: number;
     title: string;
+    slug: string; // URL-friendly slug
     excerpt: string;
     content: string | null;
     date: string;

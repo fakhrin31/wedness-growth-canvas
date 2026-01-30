@@ -15,3 +15,11 @@ export function useBlogPost(id: number) {
         enabled: !!id,
     });
 }
+
+export function useBlogPostBySlug(slug: string | undefined) {
+    return useQuery({
+        queryKey: ['blog_posts', 'slug', slug],
+        queryFn: () => BlogService.getBySlug(slug!),
+        enabled: !!slug,
+    });
+}

@@ -146,18 +146,39 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
             // Auto-extract first image from content if no cover image set
             let finalImageUrl = coverImageUrl;
             if (!finalImageUrl && data.content) {
-                const imgMatch = data.content.match(/<img[^>]+src=["']([^"']+)["']/);
-                if (imgMatch && imgMatch[1]) {
-                    finalImageUrl = imgMatch[1];
+                // Try HTML img tag first
+                const imgTagMatch = data.content.match(/<img[^>]+src=["']([^"']+)["']/);
+                if (imgTagMatch && imgTagMatch[1]) {
+                    finalImageUrl = imgTagMatch[1];
+                } else {
+                    // Try JSON format (Tiptap stores as JSON sometimes)
+                    const jsonSrcMatch = data.content.match(/"src"\s*:\s*"([^"]+)"/);
+                    if (jsonSrcMatch && jsonSrcMatch[1]) {
+                        finalImageUrl = jsonSrcMatch[1];
+                    }
                 }
+                console.log('Auto-extracted image URL:', finalImageUrl);
             }
 
             // Debug log
             console.log('Saving post with image_url:', finalImageUrl);
             console.log('Content preview:', data.content?.substring(0, 200));
 
+            // Generate slug from title
+            const generateSlug = (title: string): string => {
+                return title
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, '') // Remove special characters
+                    .replace(/\s+/g, '-') // Replace spaces with hyphens
+                    .replace(/-+/g, '-') // Replace multiple hyphens with single
+                    .trim();
+            };
+
+            const slug = initialData?.slug || generateSlug(data.title);
+
             const submitData = {
                 title: data.title,
+                slug,
                 content: data.content || null,
                 date: data.date,
                 author_id: currentUser.id,

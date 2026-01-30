@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useBlogPost } from "@/hooks/useBlogPosts";
+import { useBlogPostBySlug } from "@/hooks/useBlogPosts";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,10 +9,9 @@ import { Button } from "@/components/ui/button";
 import { ContentRenderer } from "@/components/ui/content-renderer";
 
 const BlogDetail = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
-    const postId = Number(id);
-    const { data: post, isLoading, error } = useBlogPost(postId);
+    const { data: post, isLoading, error } = useBlogPostBySlug(slug);
 
     if (isLoading) {
         return (
@@ -112,7 +111,7 @@ const BlogDetail = () => {
                     )}
 
                     {/* Content */}
-                    <ContentRenderer content={post.content || ''} />
+                    <ContentRenderer content={post.content || ''} coverImageUrl={post.image_url} />
 
                 </article>
             </main>

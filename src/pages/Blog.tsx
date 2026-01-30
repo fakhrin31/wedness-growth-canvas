@@ -66,7 +66,7 @@ const Blog = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    onClick={() => navigate(`/blog/${post.id}`)}
+                                    onClick={() => navigate(`/blog/${post.slug}`)}
                                 >
                                     <Card className="h-full overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg flex flex-col group cursor-pointer">
                                         <div className="relative aspect-video overflow-hidden bg-muted">

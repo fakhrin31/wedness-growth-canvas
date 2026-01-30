@@ -23,6 +23,17 @@ export const BlogService = {
         return data;
     },
 
+    getBySlug: async (slug: string): Promise<BlogPost | null> => {
+        const { data, error } = await supabase
+            .from('blog_posts')
+            .select('*')
+            .eq('slug', slug)
+            .single();
+
+        if (error) throw error;
+        return data;
+    },
+
     create: async (post: Omit<BlogPost, 'id' | 'created_at'>): Promise<BlogPost> => {
         const { data, error } = await supabase
             .from('blog_posts')
