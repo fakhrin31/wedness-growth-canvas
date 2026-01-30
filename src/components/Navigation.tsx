@@ -102,8 +102,7 @@ const Navigation = () => {
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`font-medium transition-colors hover:text-accent text-sm lg:text-base ${isScrolled ? "text-white" : "text-white"
-                    }`}
+                  className={`font-medium transition-colors text-sm lg:text-base text-white`}
                 >
                   {link.name}
                 </motion.a>
@@ -128,8 +127,8 @@ const Navigation = () => {
                 <button
                   onClick={() => setLanguage('ID')}
                   className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all duration-300 ${language === 'ID'
-                      ? 'bg-accent text-[#111218] shadow-sm'
-                      : 'text-white hover:text-accent'
+                    ? 'bg-accent text-[#111218] shadow-sm'
+                    : 'text-white hover:text-accent'
                     }`}
                 >
                   ID
@@ -138,8 +137,8 @@ const Navigation = () => {
                 <button
                   onClick={() => setLanguage('EN')}
                   className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all duration-300 ${language === 'EN'
-                      ? 'bg-accent text-[#111218] shadow-sm'
-                      : 'text-white hover:text-accent'
+                    ? 'bg-accent text-[#111218] shadow-sm'
+                    : 'text-white hover:text-accent'
                     }`}
                 >
                   EN
@@ -205,8 +204,8 @@ const Navigation = () => {
                 <button
                   onClick={() => setLanguage('ID')}
                   className={`flex-1 py-3 rounded-lg text-base font-semibold transition-all duration-300 ${language === 'ID'
-                      ? 'bg-accent text-[#111218] shadow-md'
-                      : 'text-foreground hover:text-accent'
+                    ? 'bg-accent text-[#111218] shadow-md'
+                    : 'text-foreground hover:text-accent'
                     }`}
                 >
                   Indonesian
@@ -214,8 +213,8 @@ const Navigation = () => {
                 <button
                   onClick={() => setLanguage('EN')}
                   className={`flex-1 py-3 rounded-lg text-base font-semibold transition-all duration-300 ${language === 'EN'
-                      ? 'bg-accent text-[#111218] shadow-md'
-                      : 'text-foreground hover:text-accent'
+                    ? 'bg-accent text-[#111218] shadow-md'
+                    : 'text-foreground hover:text-accent'
                     }`}
                 >
                   English
