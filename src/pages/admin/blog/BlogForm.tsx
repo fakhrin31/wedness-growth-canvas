@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, type ChangeEvent } from "react";
 import { Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { StorageService } from "@/services/storage.service";
 
 // Extended Schema for RBAC
 const blogSchema = z.object({
@@ -29,6 +30,7 @@ const blogSchema = z.object({
     author: z.string().optional(), // Display Name Override (optional)
     tags: z.string().min(1, "At least one tag is required"),
     read_time: z.string().optional(),
+    image_url: z.string().optional(), // Cover image URL
     status: z.enum(['draft', 'pending_review', 'published', 'rejected'] as const),
 });
 
@@ -43,6 +45,9 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
     const createPost = useCreateBlogPost();
     const updatePost = useUpdateBlogPost();
     const [currentUser, setCurrentUser] = useState<{ id: string; role: UserRole; display_name: string | null } | null>(null);
+    const [coverImageUrl, setCoverImageUrl] = useState<string>(initialData?.image_url || '');
+    const [isUploadingCover, setIsUploadingCover] = useState(false);
+    const coverInputRef = useRef<HTMLInputElement>(null);
 
     // Fetch current user details
     useEffect(() => {
@@ -79,6 +84,7 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
             author: "", // Will be placeholder or override
             tags: "",
             read_time: "",
+            image_url: "",
             status: "draft",
         },
     });
@@ -86,6 +92,7 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
     // Populate form with initial data
     useEffect(() => {
         if (initialData) {
+            setCoverImageUrl(initialData.image_url || '');
             form.reset({
                 title: initialData.title,
                 content: initialData.content || "",
@@ -93,6 +100,7 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
                 author: initialData.author || "",
                 tags: initialData.tags ? initialData.tags.join(', ') : "",
                 read_time: initialData.read_time || "",
+                image_url: initialData.image_url || "",
                 status: initialData.status,
             });
         }
@@ -135,6 +143,19 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
             const readTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
             const calculatedReadTime = `${readTimeMinutes} min read`;
 
+            // Auto-extract first image from content if no cover image set
+            let finalImageUrl = coverImageUrl;
+            if (!finalImageUrl && data.content) {
+                const imgMatch = data.content.match(/<img[^>]+src=["']([^"']+)["']/);
+                if (imgMatch && imgMatch[1]) {
+                    finalImageUrl = imgMatch[1];
+                }
+            }
+
+            // Debug log
+            console.log('Saving post with image_url:', finalImageUrl);
+            console.log('Content preview:', data.content?.substring(0, 200));
+
             const submitData = {
                 title: data.title,
                 content: data.content || null,
@@ -143,7 +164,7 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
                 author: authorDisplayName, // Display Name
                 read_time: calculatedReadTime,
                 excerpt,
-                image_url: '',
+                image_url: finalImageUrl || '', // Ensure it's not undefined
                 tags: tagsArray,
                 status: finalStatus,
                 reviewed_by: initialData?.reviewed_by || null,
@@ -165,25 +186,8 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
 
     const handleImageUpload = async (file: File): Promise<string> => {
         try {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `blog-images/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-
-            const { error: uploadError } = await supabase.storage
-                .from('blog-content')
-                .upload(fileName, file, {
-                    cacheControl: '3600',
-                    upsert: false
-                });
-
-            if (uploadError) {
-                throw uploadError;
-            }
-
-            const { data } = supabase.storage
-                .from('blog-content')
-                .getPublicUrl(fileName);
-
-            return data.publicUrl;
+            const result = await StorageService.upload(file, 'blog-images');
+            return result.url;
         } catch (error: any) {
             console.error("Upload error:", error);
             throw new Error(error.message || "Upload failed");
@@ -206,6 +210,65 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
                         </FormItem>
                     )}
                 />
+
+                {/* Cover Image Upload */}
+                <div className="space-y-2">
+                    <FormLabel>Cover Image</FormLabel>
+                    <div className="flex items-center gap-4">
+                        <input
+                            type="file"
+                            ref={coverInputRef}
+                            className="hidden"
+                            accept="image/*"
+                            onChange={async (e: ChangeEvent<HTMLInputElement>) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+
+                                try {
+                                    setIsUploadingCover(true);
+                                    const result = await StorageService.upload(file, 'cover-images');
+                                    setCoverImageUrl(result.url);
+                                } catch (error) {
+                                    console.error("Cover upload failed:", error);
+                                } finally {
+                                    setIsUploadingCover(false);
+                                    if (coverInputRef.current) coverInputRef.current.value = "";
+                                }
+                            }}
+                        />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => coverInputRef.current?.click()}
+                            disabled={isUploadingCover}
+                        >
+                            {isUploadingCover ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Uploading...
+                                </>
+                            ) : (
+                                "Upload Cover Image"
+                            )}
+                        </Button>
+                        {coverImageUrl && (
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setCoverImageUrl('')}
+                            >
+                                Remove
+                            </Button>
+                        )}
+                    </div>
+                    {coverImageUrl && (
+                        <div className="mt-2 relative rounded-lg overflow-hidden border border-border aspect-video max-w-xs">
+                            <img src={coverImageUrl} alt="Cover preview" className="w-full h-full object-cover" />
+                        </div>
+                    )}
+                    <FormDescription>This image appears as the blog post thumbnail.</FormDescription>
+                </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <FormField

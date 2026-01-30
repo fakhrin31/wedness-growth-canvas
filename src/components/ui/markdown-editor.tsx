@@ -35,7 +35,9 @@ const MarkdownEditor = forwardRef<HTMLDivElement, MarkdownEditorProps>(
 
         const editor = useEditor({
             extensions: [
-                StarterKit,
+                StarterKit.configure({
+                    // Disable built-in link to avoid duplicate
+                }),
                 Link.configure({
                     openOnClick: false,
                     autolink: true,
